@@ -1,19 +1,5 @@
 <script>
-  $(document).ready( function() {
-
-    /*
-      Adds the new task to table TASK with jQuery $.post when user presses the enter key
-      inside the form.
-    */
-    $('#new-form').submit(function(event) {
-      event.preventDefault();
-      //var payload = { task: {title: $('.new-todo').val()} };
-      //console.log(payload);
-      $.post('/tasks', { task: {title: $('.new-todo').val()} }).success(function(data) {
-        console.log("Successful HTTP Request");
-      });
-    });
-
+  $(document).ready( function() {   
     /*
       function taskHtml takes in a JavaScript representation of the task and produces an
       HTML representation using the <li> tag
@@ -53,6 +39,22 @@
 
       $('.toggle').change(taskToggle);     
     });   // end $.get
+
+    /*
+      Adds the new task to table TASK with jQuery $.post when user presses the enter key
+      inside the form.
+    */
+    $('#new-form').submit(function(event) {
+      event.preventDefault();
+      $.post('/tasks', { task: {title: $('.new-todo').val()} }).success(function(data) {
+        $('.todo-list').append(taskHtml(data));
+        $('.toggle').click(taskToggle);
+       });
+    });
+
+
+
+
 
   });   // end document ready
 </script>
