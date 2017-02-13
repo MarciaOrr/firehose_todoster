@@ -17,6 +17,16 @@ RSpec.describe TasksController, type: :controller do
     end
   end
 
+  describe 'tasks#create' do
+    it 'should allow the user to create new tasks' do
+      post :create, task: { title: 'clean bathtub'}
+      expect(response).to have_http_status(:success)
+      response_value = ActiveSupport::JSON.decode(@response.body)
+      expect(response_value['title']).to eq('clean bathtub')
+      expect(Task.last.title).to eq('clean bathtub')
+    end
+  end
+
   describe 'tasks#update' do
     it 'should allow tasks to be marked as done' do
       task = FactoryGirl.create(:task, done: false)
