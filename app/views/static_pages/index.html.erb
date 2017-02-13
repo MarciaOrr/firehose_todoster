@@ -1,9 +1,17 @@
 <script>
   $(document).ready( function() {
+
+    /*
+      Adds the new task to table TASK with jQuery $.post when user presses the enter key
+      inside the form.
+    */
     $('#new-form').submit(function(event) {
       event.preventDefault();
-
-      console.log('Task: ' + $('.new-todo').val());
+      //var payload = { task: {title: $('.new-todo').val()} };
+      //console.log(payload);
+      $.post('/tasks', { task: {title: $('.new-todo').val()} }).success(function(data) {
+        console.log("Successful HTTP Request");
+      });
     });
 
     /*
