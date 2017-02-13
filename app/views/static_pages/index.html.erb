@@ -1,14 +1,30 @@
 <script>
   $(document).ready( function() {
+    $('#new-form').submit(function(event) {
+      event.preventDefault();
+
+      console.log('Task: ' + $('.new-todo').val());
+    });
+
+    /*
+      function taskHtml takes in a JavaScript representation of the task and produces an
+      HTML representation using the <li> tag
+    */
     function taskHtml(task) {
       var checkedStatus = task.done ? 'checked' : '';
-      var liElement = '<li><div class="view">' +
-                      '<input class="toggle" type="checkbox"' + "data-id='" +task.id + "'" +checkedStatus+ '>' +
+      var checkboxInput = '<input class="toggle" type="checkbox"' +"data-id='" +task.id+ "'" +checkedStatus+ '>';
+      var liElement = '<li><div class="view">' + checkboxInput +
                       '<label>' + task.title+ '</label>' +
                       '</div></li>';
       return liElement;
     }
 
+    /*
+      function taskToggle is called through jQuery .change when the user checks or unchecks the
+      checkbox identified by class='toggle'. Refer to function taskHtml for the checkbox.
+      This function receives the event from .change, and it toggles the checkbox. It performs
+      a API request (PUT overriding jQuery$.post) to update the task's record in the Task table.
+    */
     function taskToggle(event) {
       var itemId = $(event.target).data('id');
       var doneValue = Boolean($(event.target).is(':checked'));
@@ -36,9 +52,14 @@
 <section class='todoapp'>
   <header class='header'>
     <h1>TO-DOs</h1>
+      <form id='new-form'>
+        <label>New Task</label> 
+        <input type='text' class='new-todo'/>
+      </form>
   </header>
   <section class='main'>
     <ul class='todo-list'>
+
 
     </ul>
   </section>
