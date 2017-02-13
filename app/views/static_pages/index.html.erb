@@ -2,8 +2,7 @@
   <header class='header'>
     <h1>TO-DOs</h1>
       <form id='new-form'>
-        <label>New Task</label> 
-        <input type='text' class='new-todo'/>
+        <input type='text' class='new-todo' placeholder='What needs to be done?'/>
       </form>
   </header>
   <section class='main'>
@@ -11,5 +10,11 @@
 
     </ul>
   </section>
+</section>
+
+<section class='author'>
+  A <%= link_to 'todo-mvc', 'http://todomvc.com' %>
+  application, built by
+  <%= link_to 'Marcia Orr', 'http://github.com/marciaorr' %>
 </section>
 
