@@ -3,11 +3,12 @@ $(document).ready( function() {
      HTML representation using the <li> tag.
   */
   function taskHtml(task) {
-     var checkedStatus = task.done ? 'checked' : '';
-     var checkboxInput = '<input class="toggle" type="checkbox"' +"data-id='" +task.id+ "'" +checkedStatus+ '>';
-     var liElement = '<li><div class="view">' + checkboxInput +
-                     '<label>' + task.title+ '</label>' +
-                     '</div></li>';
+    var liIdClass = '<li id="listItem-' +task.id+ '" class="' +(task.done ? 'completed' :'')+ '">'
+    var checkboxInput = '<input class="toggle" type="checkbox"' +" data-id='" +task.id+ "'" + 
+                        (task.done ? 'checked' : '') + '>';
+    // console.log(liIdClass);
+    // console.log(checkboxInput);
+    var liElement = liIdClass + '<div class="view">' + checkboxInput + '<label>' + task.title + '</label></div></li>';
     return liElement;
   }
 
@@ -15,6 +16,7 @@ $(document).ready( function() {
      checkbox identified by class='toggle'. Refer to function taskHtml for the checkbox.
      This function receives the event from .change and toggles the checkbox. It performs
      a API request (PUT overriding jQuery$.post) to update the task's record in the Task table.
+     If the item is checked completed, it will strike through the item
   */
   function taskToggle(event) {
     var itemId = $(event.target).data('id');
@@ -22,6 +24,10 @@ $(document).ready( function() {
     $.post("/tasks/" + itemId, {
       _method: "PUT",
       task: { done: doneValue }
+    }).success(function(data) {
+      var liHtml = taskHtml(data);
+      $('#listItem-' +data.id).replaceWith(liHtml);
+      $('.toggle').change(taskToggle); 
     });
   }
 
@@ -29,12 +35,11 @@ $(document).ready( function() {
   $.get('/tasks').success( function(data)  {
     var htmlString = '';
     $.each(data, function(index, task) {
-      console.log("each loop. index: " +index +'\ttask id: ' +task.id+ '\ttitle: ' +task.title+ '\tdone: ' +task.done);     
+      // console.log("each loop. index: " +index +'\ttask id: ' +task.id+ '\ttitle: ' +task.title+ '\tdone: ' +task.done);     
       htmlString += taskHtml(task);
     });
     var ulTodos = $('.todo-list');
     ulTodos.html(htmlString);
-
     $('.toggle').change(taskToggle);     
   });   // end $.get
 
